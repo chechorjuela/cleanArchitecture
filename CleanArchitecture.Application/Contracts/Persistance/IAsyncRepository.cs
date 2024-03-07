@@ -19,6 +19,6 @@ namespace CleanArchitecture.Application.Contracts.Persistance
         Task<T> GetByIdAsync(int id);
         Task<T> AddAsync(T Entity);
         Task<T> UpdateAsync(T Entity);
-        Task<T> DeleteAsync(int id);
+        Task<T> DeleteAsync(T Entity);
     }
 }
