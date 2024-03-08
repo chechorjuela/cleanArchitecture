@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using CleanArchitecture.Application.Contracts.Infrastructure;
-using CleanArchitecture.Application.Contracts.Persistance;
+using CleanArchitecture.Application.Contracts.Persistence;
 using CleanArchitecture.Application.Exceptions;
 using CleanArchitecture.Domain;
 using MediatR;
@@ -10,28 +9,30 @@ namespace CleanArchitecture.Application.Features.Streamers.Commands.DeleteStream
 {
     public class DeleteStreamerCommandHandler : IRequestHandler<DeleteStreamerCommand>
     {
-        private readonly IStreamerRepository _stremarRepository;
+        private readonly IStreamerRepository _streamerRepository;
         private readonly IMapper _mapper;
-        private readonly IEmailService _emailService;
         private readonly ILogger<DeleteStreamerCommandHandler> _logger;
 
-        public DeleteStreamerCommandHandler(IStreamerRepository stremarRepository, IMapper mapper, IEmailService emailService, ILogger<DeleteStreamerCommandHandler> logger)
+        public DeleteStreamerCommandHandler(IStreamerRepository streamerRepository, IMapper mapper, ILogger<DeleteStreamerCommandHandler> logger)
         {
-            _stremarRepository = stremarRepository;
+            _streamerRepository = streamerRepository;
             _mapper = mapper;
-            _emailService = emailService;
             _logger = logger;
         }
 
         public async Task<Unit> Handle(DeleteStreamerCommand request, CancellationToken cancellationToken)
         {
-            var streamerDelete = await _stremarRepository.GetByIdAsync(request.Id);
-            if (streamerDelete == null) {
+            var streamerToDelete = await _streamerRepository.GetByIdAsync(request.Id);
+            if (streamerToDelete == null)
+            {
                 _logger.LogError($"{request.Id} streamer no existe en el sistema");
-                throw new NotFoundException(nameof(Streamer), request.Id);
+                throw new NotFoundException(nameof(Streamer), request.Id);      
             }
-            await _stremarRepository.DeleteAsync(streamerDelete);
-            _logger.LogInformation($"Se ha eliminado correctamente el stremaer {request.Id}");
+
+            await _streamerRepository.DeleteAsync(streamerToDelete);
+
+            _logger.LogInformation($"El {request.Id} streamer fue eliminado con exito");
+
             return Unit.Value;
         }
     }

@@ -1,10 +1,11 @@
-﻿using MediatR;
-using FluentValidation;
+﻿using FluentValidation;
+using MediatR;
 using ValidationException = CleanArchitecture.Application.Exceptions.ValidationException;
+
 
 namespace CleanArchitecture.Application.Behaviours
 {
-    public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
 
@@ -16,7 +17,7 @@ namespace CleanArchitecture.Application.Behaviours
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
             if (_validators.Any())
-            {
+            { 
                 var context = new ValidationContext<TRequest>(request);
 
                 var validationResults = await Task.WhenAll(_validators.Select(v => v.ValidateAsync(context, cancellationToken)));
@@ -27,7 +28,7 @@ namespace CleanArchitecture.Application.Behaviours
                 {
                     throw new ValidationException(failures);
                 }
-
+            
             }
 
             return await next();

@@ -1,8 +1,8 @@
-﻿/*using CleanArchitecture.Data;
+﻿using CleanArchitecture.Data;
 using CleanArchitecture.Domain;
 using Microsoft.EntityFrameworkCore;
 
-StreamerDbContext dbContext = new();*/
+StreamerDbContext dbContext = new();
 await AddNewDirectorWithVideo();
 //await TrackingAndNotTracking();
 //await QueryLinq();
@@ -21,7 +21,7 @@ async Task MultipleEntitiesQuery()
     //var actor = await dbContext!.Actores!.Select(q => q.Nombre).ToListAsync();
 
 
-    /*var videoWithDirector = await dbContext!.Videos!
+    var videoWithDirector = await dbContext!.Videos!
                             .Where(q => q.Director != null)
                             .Include(q => q.Director)
                             .Select(q =>
@@ -37,7 +37,7 @@ async Task MultipleEntitiesQuery()
     foreach (var pelicula in videoWithDirector)
     {
         Console.WriteLine($"{pelicula.Movie}  - {pelicula.Director_Nombre_Completo} ");
-    }*/
+    }
 
 
 }
@@ -45,7 +45,7 @@ async Task MultipleEntitiesQuery()
 
 async Task AddNewDirectorWithVideo()
 {
-    /*var director = new Director
+    var director = new Director
     {
         Nombre = "Lorenzo",
         Apellido = "Basteri",
@@ -53,13 +53,13 @@ async Task AddNewDirectorWithVideo()
     };
 
     await dbContext.AddAsync(director);
-    await dbContext.SaveChangesAsync();*/
+    await dbContext.SaveChangesAsync();
 }
 
 
 async Task AddNewActorWithVideo() 
 {
-   /* var actor = new Actor
+    var actor = new Actor
     {
         Nombre = "Brad",
         Apellido = "Pitt"
@@ -75,7 +75,7 @@ async Task AddNewActorWithVideo()
     };
 
     await dbContext.AddAsync(videoActor);
-    await dbContext.SaveChangesAsync();*/
+    await dbContext.SaveChangesAsync();
 
 }
 
@@ -83,14 +83,14 @@ async Task AddNewActorWithVideo()
 
 async Task AddNewStreamerWithVideoId()
 {
-   /* var batmanForever = new Video
+    var batmanForever = new Video
     {
         Nombre = "batman forever",
         StreamerId = 1002
     };
 
     await dbContext.AddAsync(batmanForever);
-    await dbContext.SaveChangesAsync();*/
+    await dbContext.SaveChangesAsync();
 
 }
 
@@ -98,7 +98,7 @@ async Task AddNewStreamerWithVideoId()
 
 async Task AddNewStreamerWithVideo()
 {
-    /*var pantaya = new Streamer
+    var pantaya = new Streamer
     {
         Nombre = "Pantaya"
     };
@@ -110,7 +110,7 @@ async Task AddNewStreamerWithVideo()
     };
      
     await dbContext.AddAsync(hungerGames);
-    await dbContext.SaveChangesAsync();*/
+    await dbContext.SaveChangesAsync();
 
 }
 
@@ -119,7 +119,7 @@ async Task AddNewStreamerWithVideo()
 async Task TrackingAndNotTracking()
 {
 
-    /*var streamerWithTracking = await dbContext!.Streamers!.FirstOrDefaultAsync(x => x.Id == 1);
+    var streamerWithTracking = await dbContext!.Streamers!.FirstOrDefaultAsync(x => x.Id == 1);
     var streamerWithNoTracking = await dbContext!.Streamers!.AsNoTracking().FirstOrDefaultAsync(x => x.Id == 3);
 
 
@@ -127,7 +127,7 @@ async Task TrackingAndNotTracking()
     streamerWithNoTracking.Nombre = "Amazon Plus";
 
 
-    await dbContext!.SaveChangesAsync();*/
+    await dbContext!.SaveChangesAsync();
 
 }
 
@@ -135,7 +135,7 @@ async Task TrackingAndNotTracking()
 
 async Task QueryLinq()
 {
-    /*Console.WriteLine($"Ingrese el servicio de streaming");
+    Console.WriteLine($"Ingrese el servicio de streaming");
     var streamerNombre = Console.ReadLine();
     
     var streamers = await (from i in dbContext.Streamers
@@ -147,13 +147,13 @@ async Task QueryLinq()
         Console.WriteLine($"{streamer.Id} - {streamer.Nombre}");
     }
 
-    */
+
 }
 
 
 async Task QueryMethods()
 {
-    /*var streamer = dbContext!.Streamers!;
+    var streamer = dbContext!.Streamers!;
 
     var firstAsync =  await streamer.Where(y => y.Nombre.Contains("a")).FirstAsync();
 
@@ -172,27 +172,27 @@ async Task QueryMethods()
     var count = await streamer.CountAsync();
     var longAccount = await streamer.LongCountAsync();
     var min = await streamer.MinAsync();
-    var max = await streamer.MaxAsync();*/
+    var max = await streamer.MaxAsync();
 
 }
 
 async Task QueryFilter()
 {
-    /*Console.WriteLine($"Ingrese una compania de streaming:");
+    Console.WriteLine($"Ingrese una compania de streaming:");
     var streamingNombre = Console.ReadLine();
     var streamers = await dbContext!.Streamers!.Where(x => x.Nombre.Equals(streamingNombre)  ).ToListAsync();
 
     foreach (var streamer in streamers) 
     {
         Console.WriteLine($"{ streamer.Id} -  {streamer.Nombre}");
-    }*/
+    }
 
     //var streamerPartialResults = await dbContext!.Streamers!.Where(x => x.Nombre.Contains(streamingNombre)).ToListAsync();
-    /*var streamerPartialResults = await dbContext!.Streamers!.Where(x =>  EF.Functions.Like(x.Nombre, $"%{streamingNombre}%") ).ToListAsync();
+    var streamerPartialResults = await dbContext!.Streamers!.Where(x =>  EF.Functions.Like(x.Nombre, $"%{streamingNombre}%") ).ToListAsync();
     foreach (var streamer in streamerPartialResults)
     {
         Console.WriteLine($"{ streamer.Id} -  {streamer.Nombre}");
-    }*/
+    }
 
 
 
@@ -200,18 +200,18 @@ async Task QueryFilter()
 
 void QueryStreaming()
 { 
-    /*var streamers = dbContext!.Streamers!.ToList();
+    var streamers = dbContext!.Streamers!.ToList();
     foreach (var streamer in streamers)
     {
         Console.WriteLine($"{streamer.Id} - {streamer.Nombre}");
-    }*/
+    }
 
 }
 
 async Task AddNewRecords()
 {
 
-  /*  Streamer streamer = new()
+    Streamer streamer = new()
     {
         Nombre = "disney",
         Url = "https://www.disney.com"
@@ -244,7 +244,7 @@ async Task AddNewRecords()
 
 
     await dbContext.AddRangeAsync(movies);
-    await dbContext.SaveChangesAsync();*/
+    await dbContext.SaveChangesAsync();
 
 }
 

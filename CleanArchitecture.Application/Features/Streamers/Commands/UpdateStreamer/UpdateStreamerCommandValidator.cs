@@ -6,13 +6,11 @@ namespace CleanArchitecture.Application.Features.Streamers.Commands.UpdateStream
     {
         public UpdateStreamerCommandValidator()
         {
-            RuleFor(p => p.Name)
-                .NotNull()
-                .WithMessage("{Name} no permite valores nulos");
+            RuleFor(p => p.Nombre)
+                .NotNull().WithMessage("{Nombre} no permite valores nulos");
 
             RuleFor(p => p.Url)
-                .NotNull()
-                .WithMessage("{Url} no permite valores nulos");
+                .NotNull().WithMessage("{Ur;} no permite valores nulos");
         }
     }
 }

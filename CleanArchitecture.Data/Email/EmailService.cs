@@ -23,7 +23,7 @@ namespace CleanArchitecture.Infrastructure.Email
             _logger = logger;
         }
 
-        public async Task<bool> SendEmailAsync(Application.Models.Email email)
+        public async Task<bool> SendEmail(Application.Models.Email email)
         {
             var client = new SendGridClient(_emailSettings.ApiKey);
 
@@ -31,16 +31,23 @@ namespace CleanArchitecture.Infrastructure.Email
             var to = new EmailAddress(email.To);
             var emailBody = email.Body;
 
-            var from = new EmailAddress {
+            var from = new EmailAddress
+            {
                 Email = _emailSettings.FromAddress,
-                Name = _emailSettings.FromName,
+                Name = _emailSettings.FromName
             };
 
             var sendGridMessage = MailHelper.CreateSingleEmail(from, to, subject, emailBody, emailBody);
-
             var response = await client.SendEmailAsync(sendGridMessage);
 
-            return response.StatusCode == System.Net.HttpStatusCode.Accepted || response.StatusCode == System.Net.HttpStatusCode.OK ? true : false;
+            if (response.StatusCode == System.Net.HttpStatusCode.Accepted || response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return true;
+            }
+
+
+            _logger.LogError("El email no pudo enviarse, existen errores");
+            return false;
         }
     }
 }

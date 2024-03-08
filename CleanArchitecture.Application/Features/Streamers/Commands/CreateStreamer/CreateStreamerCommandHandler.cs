@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CleanArchitecture.Application.Contracts.Infrastructure;
-using CleanArchitecture.Application.Contracts.Persistance;
+using CleanArchitecture.Application.Contracts.Persistence;
 using CleanArchitecture.Application.Models;
 using CleanArchitecture.Domain;
 using MediatR;
@@ -11,48 +11,53 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Application.Features.Streamers.Commands.CreateStreamer
+namespace CleanArchitecture.Application.Features.Streamers.Commands
 {
     public class CreateStreamerCommandHandler : IRequestHandler<CreateStreamerCommand, int>
     {
-        private readonly IStreamerRepository _stremarRepository;
+        private readonly IStreamerRepository _streamerRepository;
         private readonly IMapper _mapper;
-        private readonly IEmailService _emailService;
+        private readonly IEmailService _emailservice;
         private readonly ILogger<CreateStreamerCommandHandler> _logger;
 
-        public CreateStreamerCommandHandler(IStreamerRepository stremarRepository, IMapper mapper, IEmailService emailService, ILogger<CreateStreamerCommandHandler> logger)
+        public CreateStreamerCommandHandler(IStreamerRepository streamerRepository, IMapper mapper, IEmailService emailservice, ILogger<CreateStreamerCommandHandler> logger)
         {
-            _stremarRepository = stremarRepository;
+            _streamerRepository = streamerRepository;
             _mapper = mapper;
-            _emailService = emailService;
+            _emailservice = emailservice;
             _logger = logger;
         }
 
         public async Task<int> Handle(CreateStreamerCommand request, CancellationToken cancellationToken)
         {
-            var streanerEntity = _mapper.Map<Streamer>(request);
-            var streamer = await _stremarRepository.AddAsync(streanerEntity);
-            _logger.LogInformation($"Streamer {streamer.Id} fue creado exitosamente");
-            await SendEmail(streamer);
-            return streamer.Id;
+            var streamerEntity = _mapper.Map<Streamer>(request);
+            var newStreamer = await _streamerRepository.AddAsync(streamerEntity);
+
+            _logger.LogInformation($"Streamer {newStreamer.Id} fue creado existosamente");
+
+            await SendEmail(newStreamer);
+
+            return newStreamer.Id;
         }
 
         private async Task SendEmail(Streamer streamer)
         {
             var email = new Email
             {
-                To = "saor89@hotmail.com",
-                Body = "La compañia de strea,er se creo correctamente",
+                To = "vaxi.drez.social@gmail.com",
+                Body = "La compania de streamer se creo correctamente",
                 Subject = "Mensaje de alerta"
             };
+
             try
             {
-                await _emailService.SendEmailAsync(email);
+                await _emailservice.SendEmail(email);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error {ex.Message}");
+            catch (Exception ex) {
+                _logger.LogError($"Errores enviando el email de {streamer.Id}");
             }
+
         }
+
     }
 }
