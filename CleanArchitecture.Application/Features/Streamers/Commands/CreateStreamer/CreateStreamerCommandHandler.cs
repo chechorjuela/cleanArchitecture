@@ -15,14 +15,21 @@ namespace CleanArchitecture.Application.Features.Streamers.Commands
 {
     public class CreateStreamerCommandHandler : IRequestHandler<CreateStreamerCommand, int>
     {
-        private readonly IStreamerRepository _streamerRepository;
+        //private readonly IStreamerRepository _streamerRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailservice;
         private readonly ILogger<CreateStreamerCommandHandler> _logger;
 
-        public CreateStreamerCommandHandler(IStreamerRepository streamerRepository, IMapper mapper, IEmailService emailservice, ILogger<CreateStreamerCommandHandler> logger)
+        public CreateStreamerCommandHandler(
+            //IStreamerRepository streamerRepository, 
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IEmailService emailservice,
+            ILogger<CreateStreamerCommandHandler> logger)
         {
-            _streamerRepository = streamerRepository;
+            //_streamerRepository = streamerRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _emailservice = emailservice;
             _logger = logger;
@@ -31,13 +38,20 @@ namespace CleanArchitecture.Application.Features.Streamers.Commands
         public async Task<int> Handle(CreateStreamerCommand request, CancellationToken cancellationToken)
         {
             var streamerEntity = _mapper.Map<Streamer>(request);
-            var newStreamer = await _streamerRepository.AddAsync(streamerEntity);
+            //var newStreamer = await _streamerRepository.AddAsync(streamerEntity);
 
-            _logger.LogInformation($"Streamer {newStreamer.Id} fue creado existosamente");
+            _unitOfWork.StreamerRepository.AddEntity(streamerEntity);
+            var result = await _unitOfWork.complate();
+            if (result <= 0)
+            {
+                throw new Exception($"No se pudo guardar el record");
+            }
 
-            await SendEmail(newStreamer);
+            _logger.LogInformation($"Streamer {streamerEntity.Id} fue creado existosamente");
 
-            return newStreamer.Id;
+            await SendEmail(streamerEntity);
+
+            return streamerEntity.Id;
         }
 
         private async Task SendEmail(Streamer streamer)
@@ -53,7 +67,8 @@ namespace CleanArchitecture.Application.Features.Streamers.Commands
             {
                 await _emailservice.SendEmail(email);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 _logger.LogError($"Errores enviando el email de {streamer.Id}");
             }
 
