@@ -18,7 +18,7 @@ namespace CleanArchitecture.Identity.Configuration
             builder.HasData(
                 new ApplicationUser
                 {
-                    Id = "1d53e2ee-ba83-4a5e-95ba-867a51907ca1",
+                    Id = "f284b3fd-f2cf-476e-a9b6-6560689cc48c",
                     Email = "admin@localhost.com",
                     NormalizedEmail = "admin@localhost.com",
                     Firstname = "Admin",
@@ -30,7 +30,7 @@ namespace CleanArchitecture.Identity.Configuration
                 },
                  new ApplicationUser
                  {
-                     Id = "b44710cd-690c-4167-8010-83e90bdd023f",
+                     Id = "294d249b-9b57-48c1-9689-11a91abb6447",
                      Email = "saor@localhost.com",
                      NormalizedEmail = "saor@localhost.com",
                      Firstname = "Sergio",

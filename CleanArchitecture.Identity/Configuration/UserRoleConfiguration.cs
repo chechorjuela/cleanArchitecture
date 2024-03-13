@@ -18,14 +18,15 @@ namespace CleanArchitecture.Identity.Configuration
             builder.HasData(
                new IdentityUserRole<string>
                {
-                   RoleId = "429e567f-78fd-4cc6-bdc0-a416bee542b0",
-                   UserId = "1d53e2ee-ba83-4a5e-95ba-867a51907ca1"
+                   RoleId = "79ba8e3f-5c28-42cb-a03e-babcfb0b5bd8",
+                   UserId = "f284b3fd-f2cf-476e-a9b6-6560689cc48c"
                },
                new IdentityUserRole<string>
                {
-                   RoleId = "7b18e054-3a1d-4cf7-b532-7328026a3d9",
-                   UserId = "b44710cd-690c-4167-8010-83e90bdd023f"
+                   RoleId = "8c26c17c-ffe7-43ad-a3b3-b6d50ca71a63",
+                   UserId = "294d249b-9b57-48c1-9689-11a91abb6447"
                }
+
            );
         }
     }
